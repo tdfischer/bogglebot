@@ -11,13 +11,8 @@ import sys
 
 logging.basicConfig(level=logging.INFO)
 
-if not os.path.exists("/tmp/boggle-dict"):
-  logging.info("Making dictionary...")
-  dictionary = MakeTrie('/usr/share/dict/words')
-  cPickle.dump(dictionary, open('/tmp/boggle-dict', 'w'))
-else:
-  logging.info("Loading saved dictionary...")
-  dictionary = cPickle.load(open("/tmp/boggle-dict", 'r'))
+logging.info("Making dictionary...")
+dictionary = MakeTrie('/usr/share/dict/words')
 characters = "abcdefghijklmnopqrstuvwxyz"
 
 class BoggleBot(irc.bot.SingleServerIRCBot):

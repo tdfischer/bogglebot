@@ -1,22 +1,30 @@
 # Originally sourced from Adam Rosenfield on
 # http://stackoverflow.com/questions/746082/how-to-find-list-of-possible-words-from-a-letter-matrix-boggle-solver#746102
 
-class TrieNode:
+import logging
+
+class TrieNode(object):
+    __slots__ = ['children', 'isWord']
+
     def __init__(self, parent, value):
-        self.parent = parent
-        self.children = [None] * 26
+        #self.parent = parent
+        self.children = [None]*26
         self.isWord = False
         if parent is not None:
-            parent.children[ord(value) - 97] = self
+            parent.children[value - 97] = self
 
 def MakeTrie(dictfile):
     dict = open(dictfile)
     root = TrieNode(None, '')
-    for word in dict:
+    i = 0
+    for word in [[ord(c) for c in w.lower()] for w in dict]:
+        i += 1
+        if i % 1000 == 0:
+          logging.info("Processed %s words...", i)
         curNode = root
-        for letter in word.lower():
-            if 97 <= ord(letter) < 123:
-                nextNode = curNode.children[ord(letter) - 97]
+        for letter in word:
+            if 97 <= letter < 123:
+                nextNode = curNode.children[letter - 97]
                 if nextNode is None:
                     nextNode = TrieNode(curNode, letter)
                 curNode = nextNode
